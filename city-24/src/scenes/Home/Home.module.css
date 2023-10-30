@@ -1,0 +1,10 @@
+.root {
+    color: wheat;
+    span {
+        font-size: var(--mantine-font-size-xl);
+    }
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        color: blue;
+    }
+}
