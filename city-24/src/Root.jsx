@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import "./Root.css";
 
-const App = () => {
+const Root = () => {
     const [opened, { toggle }] = useDisclosure();
     return (
         <AppShell
@@ -30,4 +30,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Root;
