@@ -4,6 +4,7 @@ import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "@mantine/core/styles.layer.css";
+import "@mantine/dropzone/styles.css";
 
 import { theme } from "./theme";
 import { Home } from "./scenes";

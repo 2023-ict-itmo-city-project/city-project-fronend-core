@@ -8,3 +8,23 @@
         color: blue;
     }
 }
+
+.background {
+    background-repeat: no-repeat;
+    background-position: 100%;
+    width: 50vw;
+    min-height: 100%;
+}
+
+.lending {
+    max-width: none;
+    height: 90vh;
+    /* TODO */
+    margin-inline: -14rem;
+    /* margin-inline: calc(100vw - var(--container-size)); */
+    width: 160%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -24,5 +24,6 @@ module.exports = {
             },
         ],
         indent: ["error", 4],
+        "react/no-unescaped-entities": ["error", { forbid: [] }],
     },
 };
