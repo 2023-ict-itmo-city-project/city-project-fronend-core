@@ -1,33 +1,23 @@
 import React from "react";
-import { Container, Title, Text, Button, BackgroundImage, Stack } from "@mantine/core";
-
+import { Container, Title, Text, Button, Image, Stack } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
+
 import { ReportForm } from "./scenes/ReportForm";
 import gorod from "../../../src/assets/gorod24-background.webp";
-
 import classes from "./Home.module.css";
+import { Logo } from "../../components/Logo";
 
 export const Home = () => {
     const { scrollIntoView, targetRef } = useScrollIntoView({
         offset: 60,
     });
     return (
-        <Container>
-            <Container>
-                <Container className={classes.lending}>
-                    <Stack m={0}>
-                        <Title ta="center" mb="md" order={1}>
-                            Что предоставляет сервис{" "}
-                            <Text
-                                inherit
-                                component="span"
-                                fw={900}
-                                variant="gradient"
-                                gradient={{ from: "indigo", to: "teal", deg: 50 }}
-                            >
-                                "Город-24"
-                            </Text>
-                            ?
+        <Container fluid p={0}>
+            <Container fluid p={0}>
+                <Container className={classes.lending} fluid pt={0} pr={0}>
+                    <Stack justify="center">
+                        <Title ta="center" order={1}>
+                            Что предоставляет сервис <Logo inherit={true} />?
                         </Title>
                         <Text>
                             Наш веб-сайт превращает процесс создания и отправки обращений в
@@ -42,7 +32,7 @@ export const Home = () => {
                         <Button
                             onClick={() =>
                                 scrollIntoView({
-                                    alignment: "center",
+                                    alignment: "start",
                                 })
                             }
                         >
@@ -50,17 +40,17 @@ export const Home = () => {
                         </Button>
                     </Stack>
 
-                    <Container m={0}>
-                        <BackgroundImage src={gorod} className={classes.background} />
+                    <Container pr={0}>
+                        <Image src={gorod} className={classes.background} />
                     </Container>
                 </Container>
             </Container>
-
             <Container
                 // @ts-ignore
                 ref={targetRef}
                 m={0}
-                mt="xl"
+                mt="6rem"
+                mx="auto"
             >
                 <ReportForm />
             </Container>

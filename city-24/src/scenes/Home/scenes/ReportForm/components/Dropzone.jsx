@@ -1,18 +1,26 @@
-import React from "react";
-import { Group, Text, rem } from "@mantine/core";
+import React, { useRef } from "react";
+import { Button, Group, Stack, Text, rem } from "@mantine/core";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
 import { Dropzone as MantineDropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 
 export const Dropzone = (props) => {
+    const openRef = useRef(null);
     return (
         <MantineDropzone
-            onDrop={(files) => console.log("accepted files", files)}
+            openRef={openRef}
             onReject={(files) => console.log("rejected files", files)}
-            maxSize={3 * 1024 ** 2}
+            maxSize={10 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
+            activateOnClick={false}
             {...props}
         >
-            <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: "none" }}>
+            <Stack
+                justify="center"
+                align="center"
+                gap="xl"
+                mih={220}
+                style={{ pointerEvents: "none" }}
+            >
                 <MantineDropzone.Accept>
                     <IconUpload
                         style={{
@@ -44,15 +52,21 @@ export const Dropzone = (props) => {
                     />
                 </MantineDropzone.Idle>
 
-                <div>
-                    <Text size="xl" inline>
-                        Drag images here or click to select files
+                <Stack align="center" gap={0}>
+                    <Text size="xl">Перетащите фотографию сюда</Text>
+                    <Text size="sm" c="dimmed">
+                        или нажмите на кнопку
                     </Text>
-                    <Text size="sm" c="dimmed" inline mt={7}>
-                        Attach as many files as you like, each file should not exceed 5mb
-                    </Text>
-                </div>
-            </Group>
+                    <Group mt="md">
+                        <Button
+                            onClick={() => openRef.current?.()}
+                            style={{ pointerEvents: "all" }}
+                        >
+                            Выбрать фото
+                        </Button>
+                    </Group>
+                </Stack>
+            </Stack>
         </MantineDropzone>
     );
 };

@@ -6,6 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 import classes from "./Root.module.css";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Footer } from "./components/Footer";
+import { Logo } from "./components/Logo";
 
 const Root = () => {
     const [opened, { toggle }] = useDisclosure();
@@ -13,13 +14,12 @@ const Root = () => {
         <AppShell
             header={{ height: 60 }}
             navbar={{ width: 300, breakpoint: "sm", collapsed: { desktop: true, mobile: !opened } }}
-            padding="md"
         >
             <AppShell.Header>
                 <Group h="100%" px="md">
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
                     <Group justify="space-between" style={{ flex: 1 }}>
-                        Logo
+                        <Logo />
                         <Group ml="xl" gap={0} visibleFrom="sm">
                             <Link className={classes.control} to="/">
                                 Home

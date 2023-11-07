@@ -1,41 +1,96 @@
-import { Box, Button, Checkbox, Container, Group, Skeleton, Text, TextInput } from "@mantine/core";
+import {
+    Box,
+    Button,
+    Image,
+    Group,
+    Select,
+    Stack,
+    Textarea,
+    Title,
+    FileButton,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React from "react";
 
 import { Dropzone } from "./components";
+import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
 
 export const ReportForm = () => {
     const form = useForm({
         initialValues: {
-            email: "",
-            termsOfService: false,
+            imageFile: null,
+            category: "",
         },
 
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-        },
+        validate: {},
     });
 
+    const handleSetImage = (imageFiles) => {
+        form.setFieldValue("imageFile", imageFiles[0]);
+    };
+
+    const handleRemoveImage = () => {
+        form.setFieldValue("imageFile", null);
+    };
+
+    const handleSubmit = (values) => {
+        console.log(values);
+    };
+
     return (
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <Dropzone />
-            <Box maw={340} mx="auto">
-                <TextInput
-                    label="Email"
-                    placeholder="your@email.com"
-                    {...form.getInputProps("email")}
-                />
+        <Box maw={600} mx="auto">
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <Title mb="sm" order={2}>
+                    Создание обращения
+                </Title>
+                {form.values.imageFile === null ? (
+                    <Dropzone mx="auto" onDrop={handleSetImage} />
+                ) : (
+                    <Stack>
+                        <Box style={{ borderRadius: "1rem" }}>
+                            <Image
+                                mah="40vh"
+                                fit="contain"
+                                src={URL.createObjectURL(form.values.imageFile)}
+                            />
+                        </Box>
+                        <Group justify="center">
+                            <FileButton
+                                onChange={(imageFile) => handleSetImage([imageFile])}
+                                // @ts-ignore
+                                accept={IMAGE_MIME_TYPE}
+                            >
+                                {(props) => <Button {...props}>Выбрать другое фото</Button>}
+                            </FileButton>
+                            <Button variant="outline" color="pink" onClick={handleRemoveImage}>
+                                Удалить
+                            </Button>
+                        </Group>
+                    </Stack>
+                )}
+                <Box maw={340} mt="md" mx="auto">
+                    <Stack>
+                        <Select
+                            label="Категория"
+                            description="Здесь вы можете выбрать категорию проблемы"
+                            placeholder="Мусор"
+                            data={["🗑️ Мусор", "❄ Осадки", "⚠ Опасность", "✨ Другое"]}
+                            {...form.getInputProps("category")}
+                        />
+                        <Textarea
+                            label="Описание проблемы"
+                            description="Здесь вы можете описать проблему"
+                            placeholder="У моего дома не убирают мусор"
+                        />
+                    </Stack>
 
-                <Checkbox
-                    mt="md"
-                    label="I agree to sell my privacy"
-                    {...form.getInputProps("termsOfService", { type: "checkbox" })}
-                />
-
-                <Group justify="flex-end" mt="md">
-                    <Button type="submit">Submit</Button>
-                </Group>
-            </Box>
-        </form>
+                    <Group justify="center" mt="md">
+                        <Button type="submit" fullWidth>
+                            Отправить
+                        </Button>
+                    </Group>
+                </Box>
+            </form>
+        </Box>
     );
 };
