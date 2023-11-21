@@ -13,8 +13,8 @@ export const ThemeToggle = () => {
             onClick={() => setColorScheme(dark ? "light" : "dark")}
             variant="default"
             aria-label="Toggle color scheme"
-            h="100%"
-            w="auto"
+            h="1rem"
+            w="1rem"
             size="lg"
             m="sm"
         >

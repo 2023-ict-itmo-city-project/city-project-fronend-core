@@ -14,27 +14,66 @@ import React from "react";
 
 import { Dropzone } from "./components";
 import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { useUuid, useGeolocation } from "./hooks";
+import { categoriesObj } from "./categories";
+import { useNavigate } from "react-router-dom";
 
 export const ReportForm = () => {
+    let navigate = useNavigate();
+    const routeChange = () => {
+        let path = `/reports`;
+        navigate(path);
+    };
+
+    const uuid = useUuid();
+    const location = useGeolocation();
+    console.log("uuid", uuid);
+
     const form = useForm({
         initialValues: {
-            imageFile: null,
+            file: null,
             category: "",
+            description: "",
         },
 
         validate: {},
     });
 
     const handleSetImage = (imageFiles) => {
-        form.setFieldValue("imageFile", imageFiles[0]);
+        form.setFieldValue("file", imageFiles[0]);
     };
 
     const handleRemoveImage = () => {
-        form.setFieldValue("imageFile", null);
+        form.setFieldValue("file", null);
     };
 
-    const handleSubmit = (values) => {
-        console.log(values);
+    const handleSubmit = async (values) => {
+        console.log("values", values, uuid, location);
+
+        const formData = new FormData();
+
+        formData.append("file", values.file);
+        formData.append(
+            "issue",
+            JSON.stringify({
+                categoryId: categoriesObj[values.category],
+                description: values.description,
+                location,
+            })
+        );
+
+        // @ts-ignore
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/`, {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "X-User-UUID": uuid,
+            },
+            body: formData,
+        });
+        console.log("res", res);
+
+        if (res.ok) routeChange();
     };
 
     return (
@@ -43,7 +82,7 @@ export const ReportForm = () => {
                 <Title mb="sm" order={2}>
                     Создание обращения
                 </Title>
-                {form.values.imageFile === null ? (
+                {form.values.file === null ? (
                     <Dropzone mx="auto" onDrop={handleSetImage} />
                 ) : (
                     <Stack>
@@ -51,7 +90,7 @@ export const ReportForm = () => {
                             <Image
                                 mah="40vh"
                                 fit="contain"
-                                src={URL.createObjectURL(form.values.imageFile)}
+                                src={URL.createObjectURL(form.values.file)}
                             />
                         </Box>
                         <Group justify="center">
@@ -74,13 +113,14 @@ export const ReportForm = () => {
                             label="Категория"
                             description="Здесь вы можете выбрать категорию проблемы"
                             placeholder="Мусор"
-                            data={["🗑️ Мусор", "❄ Осадки", "⚠ Опасность", "✨ Другое"]}
+                            data={Object.keys(categoriesObj)}
                             {...form.getInputProps("category")}
                         />
                         <Textarea
                             label="Описание проблемы"
                             description="Здесь вы можете описать проблему"
                             placeholder="У моего дома не убирают мусор"
+                            {...form.getInputProps("description")}
                         />
                     </Stack>
 

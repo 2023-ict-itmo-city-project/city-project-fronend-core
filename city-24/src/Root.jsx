@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Group, Space } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import classes from "./Root.module.css";
@@ -9,7 +9,7 @@ import { Footer } from "./components/Footer";
 import { Logo } from "./components/Logo";
 
 const Root = () => {
-    const [opened, { toggle }] = useDisclosure();
+    const [opened, { toggle, close }] = useDisclosure();
     return (
         <AppShell
             header={{ height: 60 }}
@@ -22,10 +22,10 @@ const Root = () => {
                         <Logo />
                         <Group ml="xl" gap={0} visibleFrom="sm">
                             <Link className={classes.control} to="/">
-                                Home
+                                Главная
                             </Link>
                             <Link className={classes.control} to="/reports">
-                                Reports
+                                Обращения
                             </Link>
                             <ThemeToggle />
                         </Group>
@@ -34,12 +34,13 @@ const Root = () => {
             </AppShell.Header>
 
             <AppShell.Navbar py="md" px={4}>
-                <Link className={classes.control} to="/">
-                    Home
+                <Link className={classes.control} to="/" onClick={close}>
+                    Главная
                 </Link>
-                <Link className={classes.control} to="/reports">
-                    Reports
+                <Link className={classes.control} to="/reports" onClick={close}>
+                    Обращения
                 </Link>
+                <Space h="md" mt="auto" />
                 <ThemeToggle />
             </AppShell.Navbar>
 

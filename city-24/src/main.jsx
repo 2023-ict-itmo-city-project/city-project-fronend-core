@@ -7,7 +7,7 @@ import "@mantine/core/styles.layer.css";
 import "@mantine/dropzone/styles.css";
 
 import { theme } from "./theme";
-import { Home } from "./scenes";
+import { Home, Reports } from "./scenes";
 import Root from "./Root";
 
 const router = createBrowserRouter([
@@ -21,7 +21,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/reports",
-                element: <div>There are no reports</div>,
+                element: <Reports />,
+            },
+            {
+                path: "/details",
+                element: <>детали</>,
             },
         ],
     },
