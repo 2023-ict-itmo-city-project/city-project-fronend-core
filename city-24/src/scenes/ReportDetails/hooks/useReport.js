@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useUuid } from "../../../hooks";
 import { mapReports } from "../../../utility/mapReport";
 
-export const useMyReports = () => {
+export const useReport = (id) => {
     const uuid = useUuid();
-    const [reports, setReports] = useState([]);
+    const [report, setReport] = useState(null);
 
     useEffect(() => {
         // @ts-ignore
-        const url = `${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/my`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/${id}`;
 
         const fetchData = async () => {
             try {
@@ -21,14 +21,14 @@ export const useMyReports = () => {
                 });
                 const data = await response.json();
 
-                const reports = mapReports(data);
-                setReports(reports);
+                const [report] = mapReports([data]);
+                setReport(report);
             } catch (error) {
                 console.log("error", error);
             }
         };
         fetchData();
-    }, [uuid]);
+    }, []);
 
-    return reports;
+    return report;
 };

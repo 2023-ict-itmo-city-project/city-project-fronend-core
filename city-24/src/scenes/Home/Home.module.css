@@ -12,4 +12,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        padding-inline: var(--mantine-spacing-lg) !important;
+    }
 }

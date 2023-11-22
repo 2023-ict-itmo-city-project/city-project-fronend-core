@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Image, Text, Badge, Button, Group, Box } from "@mantine/core";
+import { Card, Image, Text, Badge, Button, Group, Box, Center } from "@mantine/core";
 
 import { useMyReports } from "./hooks";
 import classes from "./Reports.module.css";
-import { statusObj } from "./statuses";
-import { categoryIdObj } from "../../categories";
-import { useUuid } from "../../hooks";
-import { unixToDate } from "./utility";
 
 export const Reports = () => {
     let navigate = useNavigate();
@@ -16,25 +12,15 @@ export const Reports = () => {
         navigate(path);
     };
 
-    const [reports, setReports] = useState([]);
-    const uuid = useUuid();
-    const data = useMyReports();
-
-    useEffect(() => {
-        const processedData = data.map(({ status, createdAt, categoryId, ...rest }) => ({
-            category: categoryIdObj[categoryId],
-            date: unixToDate(createdAt),
-            status: statusObj[status],
-            ...rest,
-        }));
-
-        setReports(processedData);
-    }, [uuid, data]);
+    const reports = useMyReports();
 
     console.log("reports", reports);
 
+    // @ts-ignore
+    const url = import.meta.env.VITE_BACKEND_URL;
+
     return (
-        <Box maw={600} mx="auto" className={classes.reports} pt="xs">
+        <Box maw={600} mx="auto" className={classes.reports} pt="xs" mb="md">
             {reports.map((report) => (
                 <Card
                     shadow="sm"
@@ -46,7 +32,16 @@ export const Reports = () => {
                     mt="md"
                 >
                     <Card.Section>
-                        <Image src={report.documentPath} alt="Фото обращения" />
+                        <Center>
+                            <Image
+                                src={`${url}/api/v0/issues/${report.id}/downloadFile`}
+                                alt="Фото обращения"
+                                fallbackSrc="https://placehold.co/200x100?text=Placeholder"
+                                w="auto"
+                                fit="contain"
+                                height="250"
+                            />
+                        </Center>
                     </Card.Section>
 
                     <Group justify="space-between" mt="md">
