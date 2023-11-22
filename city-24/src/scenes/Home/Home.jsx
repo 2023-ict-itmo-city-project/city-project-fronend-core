@@ -40,7 +40,7 @@ export const Home = () => {
                         </Button>
                     </Stack>
 
-                    <Container pr={0}>
+                    <Container pr={0} visibleFrom="sm">
                         <Image src={gorod} className={classes.background} />
                     </Container>
                 </Container>

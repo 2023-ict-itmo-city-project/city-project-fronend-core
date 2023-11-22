@@ -1,2 +1,2 @@
 export * from "./ReportForm";
-export * from "./categories";
+export * from "../../../../categories";

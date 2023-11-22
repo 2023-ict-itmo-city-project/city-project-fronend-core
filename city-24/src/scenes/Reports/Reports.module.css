@@ -1,0 +1,6 @@
+.reports {
+    min-height: calc(
+        100vh - var(--app-shell-header-height) - (var(--mantine-spacing-md) * 2) - 1.3rem
+            /* TODO fix magic number */
+    );
+}

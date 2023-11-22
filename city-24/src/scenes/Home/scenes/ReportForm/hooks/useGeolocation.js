@@ -14,7 +14,6 @@ export const useGeolocation = () => {
     function success(position) {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
         // @ts-ignore
         setLocation({ lat, lon });
     }

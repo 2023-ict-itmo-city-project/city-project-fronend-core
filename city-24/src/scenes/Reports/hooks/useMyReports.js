@@ -1,8 +1,10 @@
-import { useEffect } from "react";
-import { useUuid } from "../../Home/scenes/ReportForm/hooks";
+import { useEffect, useState } from "react";
+import { useUuid } from "../../../hooks";
 
 export const useMyReports = () => {
     const uuid = useUuid();
+    const [reports, setReports] = useState([]);
+
     useEffect(() => {
         // @ts-ignore
         const url = `${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/my`;
@@ -16,16 +18,14 @@ export const useMyReports = () => {
                         "X-User-UUID": uuid,
                     },
                 });
-                const json = await response.json();
-                console.log(json);
-                return json;
+                const data = await response.json();
+                setReports(data);
             } catch (error) {
                 console.log("error", error);
             }
         };
-
         fetchData();
     }, [uuid]);
 
-    return;
+    return reports;
 };

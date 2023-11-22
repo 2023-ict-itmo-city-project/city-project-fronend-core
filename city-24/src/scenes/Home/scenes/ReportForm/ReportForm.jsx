@@ -8,15 +8,17 @@ import {
     Textarea,
     Title,
     FileButton,
+    Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React from "react";
 
 import { Dropzone } from "./components";
 import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useUuid, useGeolocation } from "./hooks";
-import { categoriesObj } from "./categories";
+import { useGeolocation } from "./hooks";
+import { categoryObj } from "../../../../categories";
 import { useNavigate } from "react-router-dom";
+import { useUuid } from "../../../../hooks";
 
 export const ReportForm = () => {
     let navigate = useNavigate();
@@ -27,7 +29,6 @@ export const ReportForm = () => {
 
     const uuid = useUuid();
     const location = useGeolocation();
-    console.log("uuid", uuid);
 
     const form = useForm({
         initialValues: {
@@ -36,7 +37,10 @@ export const ReportForm = () => {
             description: "",
         },
 
-        validate: {},
+        validate: {
+            file: (value) => (value === null ? "Выберите фото" : null),
+            category: (value) => (value.length === 0 ? "Выберите категорию проблемы" : null),
+        },
     });
 
     const handleSetImage = (imageFiles) => {
@@ -48,19 +52,25 @@ export const ReportForm = () => {
     };
 
     const handleSubmit = async (values) => {
-        console.log("values", values, uuid, location);
+        form.clearErrors();
+
+        console.log("location", location);
+        if (!location) {
+            form.setErrors({
+                location: "Пожалуйста, разрешите доступ к геолокации.",
+            });
+            return;
+        }
 
         const formData = new FormData();
+        const issue = JSON.stringify({
+            categoryId: categoryObj[values.category],
+            description: values.description,
+            location,
+        });
 
         formData.append("file", values.file);
-        formData.append(
-            "issue",
-            JSON.stringify({
-                categoryId: categoriesObj[values.category],
-                description: values.description,
-                location,
-            })
-        );
+        formData.append("issue", issue);
 
         // @ts-ignore
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/`, {
@@ -71,19 +81,24 @@ export const ReportForm = () => {
             },
             body: formData,
         });
-        console.log("res", res);
 
         if (res.ok) routeChange();
+        else
+            form.setErrors({
+                "server-side": `Произошла ошибка (${res.status}${
+                    res.statusText ? ` ${res.statusText}` : ""
+                })`,
+            });
     };
 
     return (
-        <Box maw={600} mx="auto">
+        <Box maw={600} mx="auto" mb="xl" pb="xl">
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <Title mb="sm" order={2}>
                     Создание обращения
                 </Title>
                 {form.values.file === null ? (
-                    <Dropzone mx="auto" onDrop={handleSetImage} />
+                    <Dropzone mx="auto" onDrop={handleSetImage} error={form.errors["file"]} />
                 ) : (
                     <Stack>
                         <Box style={{ borderRadius: "1rem" }}>
@@ -110,10 +125,11 @@ export const ReportForm = () => {
                 <Box maw={340} mt="md" mx="auto">
                     <Stack>
                         <Select
+                            withAsterisk
                             label="Категория"
                             description="Здесь вы можете выбрать категорию проблемы"
                             placeholder="Мусор"
-                            data={Object.keys(categoriesObj)}
+                            data={Object.keys(categoryObj)}
                             {...form.getInputProps("category")}
                         />
                         <Textarea
@@ -125,6 +141,16 @@ export const ReportForm = () => {
                     </Stack>
 
                     <Group justify="center" mt="md">
+                        {["server-side", "location"].map((errorKey) => (
+                            <Text
+                                key={errorKey}
+                                c="var(--mantine-color-error)"
+                                fz="sm"
+                                style={{ textIndent: 0 }}
+                            >
+                                {form.errors[errorKey]}
+                            </Text>
+                        ))}
                         <Button type="submit" fullWidth>
                             Отправить
                         </Button>
