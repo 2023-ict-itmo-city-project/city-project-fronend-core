@@ -11,13 +11,14 @@ import {
     Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React from "react";
+import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Compressor from "compressorjs";
 
 import { Dropzone } from "./components";
-import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useGeolocation } from "./hooks";
 import { categoryObj } from "../../../../categories";
-import { useNavigate } from "react-router-dom";
 import { useUuid } from "../../../../hooks";
 
 export const ReportForm = () => {
@@ -43,8 +44,18 @@ export const ReportForm = () => {
         },
     });
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleSetImage = (imageFiles) => {
-        form.setFieldValue("file", imageFiles[0]);
+        const image = imageFiles[0];
+        new Compressor(image, {
+            quality: 0.8,
+            maxHeight: 1920,
+            maxWidth: 1080,
+            success: (res) => {
+                form.setFieldValue("file", res);
+            },
+        });
     };
 
     const handleRemoveImage = () => {
@@ -72,6 +83,7 @@ export const ReportForm = () => {
         formData.append("file", values.file);
         formData.append("issue", issue);
 
+        setIsLoading(true);
         // @ts-ignore
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v0/issues/`, {
             method: "POST",
@@ -89,6 +101,7 @@ export const ReportForm = () => {
                     res.statusText ? ` ${res.statusText}` : ""
                 })`,
             });
+        setIsLoading(false);
     };
 
     return (
@@ -151,7 +164,7 @@ export const ReportForm = () => {
                                 {form.errors[errorKey]}
                             </Text>
                         ))}
-                        <Button type="submit" fullWidth>
+                        <Button type="submit" loading={isLoading} fullWidth>
                             Отправить
                         </Button>
                     </Group>

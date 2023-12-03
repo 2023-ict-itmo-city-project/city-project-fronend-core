@@ -1,4 +1,4 @@
-import { Box, Card, Image, Text, Badge, Group, Anchor } from "@mantine/core";
+import { Box, Card, Image, Text, Badge, Group, Anchor, Title } from "@mantine/core";
 import React from "react";
 
 import classes from "./ReportDetails.module.css";
@@ -12,7 +12,11 @@ export const ReportDetails = () => {
     // @ts-ignore
     const url = import.meta.env.VITE_BACKEND_URL;
     return (
-        <Box maw={600} mx="auto" className={classes.details} mb="md">
+        <Box maw={800} mx="auto" className={classes.details} mb="md">
+            <Title mb="sm" order={2}>
+                Подробности обращения:
+            </Title>
+
             {report && (
                 <Card
                     shadow="sm"
@@ -27,7 +31,9 @@ export const ReportDetails = () => {
                         <Image
                             src={`${url}/api/v0/issues/${report.id}/downloadFile`}
                             alt="Фото обращения"
-                            fallbackSrc="https://placehold.co/300x200?text=Placeholder"
+                            mah="70vh"
+                            fit="contain"
+                            // fallbackSrc="https://placehold.co/300x200?text=Placeholder"
                         />
                     </Card.Section>
                     <Group justify="space-between" mt="md">

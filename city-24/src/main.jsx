@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "@mantine/core/styles.layer.css";
 import "@mantine/dropzone/styles.css";
+import "./utility/polyfills/groupBy";
 
 import { theme } from "./theme";
 import { Home, ReportDetails, Reports } from "./scenes";

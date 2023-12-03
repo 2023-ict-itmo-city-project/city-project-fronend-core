@@ -17,7 +17,13 @@ const Root = () => {
         >
             <AppShell.Header>
                 <Group h="100%" px="md">
-                    <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                    <Burger
+                        opened={opened}
+                        onClick={toggle}
+                        hiddenFrom="sm"
+                        size="sm"
+                        aria-label="menu"
+                    />
                     <Group justify="space-between" style={{ flex: 1 }}>
                         <Logo />
                         <Group ml="xl" gap={0} visibleFrom="sm">

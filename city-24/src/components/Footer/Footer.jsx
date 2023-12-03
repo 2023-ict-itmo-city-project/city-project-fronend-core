@@ -12,7 +12,10 @@ export function Footer() {
                     className={classes.link}
                     href="#"
                     underline="hover"
-                    onClick={(event) => event.preventDefault()}
+                    onClick={(e) => {
+                        window.location.href = "mailto:no-reply@example.com";
+                        e.preventDefault();
+                    }}
                     size="sm"
                 >
                     Связаться с нами
