@@ -12,8 +12,8 @@ export const ReportDetails = () => {
     // @ts-ignore
     const url = import.meta.env.VITE_BACKEND_URL;
     return (
-        <Box maw={800} mx="auto" className={classes.details} mb="md">
-            <Title mb="sm" order={2}>
+        <Box maw={800} px="md" mx="auto" className={classes.details} pt="xs" mb="md">
+            <Title mb="sm" order={2} ml="sm">
                 Подробности обращения:
             </Title>
 
@@ -23,6 +23,7 @@ export const ReportDetails = () => {
                     padding="lg"
                     radius="md"
                     mx="xs"
+                    ml="sm"
                     withBorder
                     key={report.id}
                     mt="md"

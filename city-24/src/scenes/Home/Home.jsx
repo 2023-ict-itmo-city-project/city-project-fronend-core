@@ -15,7 +15,7 @@ export const Home = () => {
         <Container fluid p={0}>
             <Container fluid p={0}>
                 <Container className={classes.lending} fluid pt={0} pr={0}>
-                    <Stack justify="center">
+                    <Stack justify="center" px="md">
                         <Title ta="center" order={1}>
                             Что предоставляет сервис <Logo inherit={true} />?
                         </Title>
